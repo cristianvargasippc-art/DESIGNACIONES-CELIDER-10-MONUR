@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CELIDER 10 - Designaciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue-900:#042C53;--blue-800:#0C447C;--blue-700:#185FA5;--blue-600:#1E72C2;--blue-500:#378ADD;--blue-300:#85B7EB;--blue-200:#B5D4F4;--blue-100:#D6E9F9;--blue-50:#EBF4FC;
+  --gray-900:#1a1f2e;--gray-800:#2d3446;--gray-600:#4a5568;--gray-400:#7a8499;--gray-200:#e2e8f0;--gray-100:#f0f4f8;--gray-50:#f8fafc;
+  --white:#ffffff;--accent:#1E72C2;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Barlow',sans-serif;
+  background:linear-gradient(160deg,#042C53 0%,#0C447C 40%,#1E72C2 100%);
+  min-height:100vh;color:var(--white);
+}
+.page-wrap{max-width:1000px;margin:0 auto;padding:0 16px 60px}
+
+/* HEADER */
+header{
+  text-align:center;padding:40px 16px 32px;
+  position:relative;
+}
+.header-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);
+  border-radius:40px;padding:6px 20px;font-size:12px;letter-spacing:2px;
+  text-transform:uppercase;font-weight:600;margin-bottom:16px;
+  backdrop-filter:blur(8px);
+}
+.header-badge span{width:8px;height:8px;border-radius:50%;background:#7dd3fc;display:inline-block}
+h1{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(2.2rem,6vw,3.8rem);font-weight:700;line-height:1;
+  letter-spacing:-1px;margin-bottom:8px;
+}
+h1 em{color:#7dd3fc;font-style:normal}
+.subtitle{font-size:clamp(13px,2.5vw,16px);opacity:.75;font-weight:400;letter-spacing:.5px}
+.divider{width:60px;height:3px;background:linear-gradient(90deg,#7dd3fc,rgba(125,211,252,0));margin:20px auto}
+
+/* SEARCH BOX */
+.search-section{padding:0 0 8px}
+.search-wrap{
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:16px;padding:24px;
+  box-shadow:0 8px 32px rgba(4,44,83,0.3);
+}
+.search-label{font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:.7;margin-bottom:10px;display:block}
+.search-row{display:flex;gap:10px;flex-wrap:wrap}
+#searchInput{
+  flex:1;min-width:200px;
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:10px;padding:12px 16px;
+  font-size:16px;color:var(--white);font-family:'Barlow',sans-serif;
+  outline:none;transition:all .2s;
+}
+#searchInput::placeholder{color:rgba(255,255,255,0.5)}
+#searchInput:focus{background:rgba(255,255,255,0.22);border-color:rgba(255,255,255,0.6);box-shadow:0 0 0 3px rgba(125,211,252,0.2)}
+.btn-search{
+  background:#7dd3fc;color:#042C53;
+  border:none;border-radius:10px;padding:12px 24px;
+  font-family:'Barlow',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .15s;white-space:nowrap;letter-spacing:.3px;
+}
+.btn-search:hover{background:#bae6fd;transform:translateY(-1px)}
+.btn-search:active{transform:scale(.98)}
+.btn-clear{
+  background:rgba(255,255,255,0.12);color:var(--white);
+  border:1px solid rgba(255,255,255,0.25);border-radius:10px;padding:12px 18px;
+  font-family:'Barlow',sans-serif;font-size:14px;cursor:pointer;transition:all .15s;
+}
+.btn-clear:hover{background:rgba(255,255,255,0.2)}
+
+/* SUGGESTIONS */
+#suggestions{
+  margin-top:8px;display:none;
+  background:rgba(4,44,83,0.95);backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.15);border-radius:10px;overflow:hidden;
+  max-height:220px;overflow-y:auto;
+}
+.suggestion-item{
+  padding:10px 16px;cursor:pointer;font-size:14px;
+  border-bottom:1px solid rgba(255,255,255,0.06);transition:background .1s;
+}
+.suggestion-item:last-child{border-bottom:none}
+.suggestion-item:hover{background:rgba(125,211,252,0.15)}
+.suggestion-item mark{background:transparent;color:#7dd3fc;font-weight:700}
+
+/* STATS BAR */
+.stats-bar{
+  display:flex;gap:12px;margin:20px 0;flex-wrap:wrap;
+}
+.stat-chip{
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);
+  border-radius:8px;padding:8px 16px;font-size:13px;font-weight:500;
+  display:flex;align-items:center;gap:6px;
+}
+.stat-chip strong{color:#7dd3fc;font-size:15px}
+
+/* RESULTS */
+#results{margin-top:8px}
+.result-count{font-size:13px;opacity:.6;margin-bottom:16px;font-weight:500}
+
+/* DELEGATE CARD */
+.delegate-card{
+  background:var(--white);color:#042C53;
+  border-radius:16px;margin-bottom:16px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(4,44,83,0.25);
+  transition:transform .15s,box-shadow .15s;
+}
+.delegate-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(4,44,83,0.35)}
+
+.card-header{
+  background:linear-gradient(135deg,#042C53,#185FA5);
+  padding:18px 20px 16px;
+  display:flex;align-items:center;gap:14px;
+}
+.avatar{
+  width:48px;height:48px;border-radius:50%;
+  background:rgba(125,211,252,0.2);border:2px solid rgba(125,211,252,0.5);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;
+  color:#7dd3fc;flex-shrink:0;
+}
+.card-name-block{flex:1;min-width:0}
+.card-name{
+  font-size:clamp(15px,2.5vw,17px);font-weight:700;color:var(--white);
+  line-height:1.2;
+}
+.card-district{
+  font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px;font-weight:500;letter-spacing:.3px;
+}
+.card-type-badge{
+  background:rgba(125,211,252,0.15);border:1px solid rgba(125,211,252,0.35);
+  border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;
+  color:#7dd3fc;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;
+}
+
+.card-body{padding:18px 20px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.info-item{}
+.info-label{
+  font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:#7a8499;margin-bottom:4px;
+}
+.info-value{font-size:14px;font-weight:600;color:#042C53;line-height:1.3}
+.info-value.highlight{color:#185FA5}
+.info-value.commission{
+  background:#EBF4FC;border:1px solid #B5D4F4;
+  border-radius:6px;padding:6px 10px;display:inline-block;
+  font-size:13px;
+}
+.info-value.designation{
+  background:#f0fdf4;border:1px solid #bbf7d0;
+  border-radius:6px;padding:6px 10px;display:inline-block;
+  font-size:13px;color:#15803d;
+}
+
+/* LINK BUTTON */
+.link-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#185FA5,#1E72C2);
+  color:var(--white);text-decoration:none;
+  border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;
+  transition:all .15s;margin-top:4px;
+}
+.link-btn:hover{background:linear-gradient(135deg,#0C447C,#185FA5);transform:translateY(-1px)}
+.link-btn svg{width:14px;height:14px;flex-shrink:0}
+
+/* CO-DELEGATE SECTION */
+.codelegado-section{
+  background:#f0f9ff;border-top:1px solid #bae6fd;
+  padding:14px 20px;
+}
+.codelegado-title{
+  font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:#0C447C;margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.codelegado-title::before{content:'';width:12px;height:2px;background:#185FA5;display:inline-block}
+.codelegado-grid{display:flex;flex-wrap:wrap;gap:10px}
+.codelegado-chip{
+  display:flex;align-items:center;gap:8px;
+  background:var(--white);border:1px solid #B5D4F4;
+  border-radius:8px;padding:8px 12px;
+  font-size:13px;
+}
+.codelegado-chip .co-name{font-weight:600;color:#042C53}
+.codelegado-chip .co-phone{color:#185FA5;font-weight:600}
+.codelegado-chip .co-country{color:#7a8499;font-size:12px}
+.phone-link{color:#185FA5;text-decoration:none;font-weight:700}
+.phone-link:hover{text-decoration:underline}
+
+/* EMPTY STATE */
+.empty-state{
+  text-align:center;padding:60px 20px;
+  background:rgba(255,255,255,0.05);border-radius:16px;
+  border:1px dashed rgba(255,255,255,0.2);margin-top:8px;
+}
+.empty-state h3{font-size:18px;margin-bottom:8px;opacity:.8}
+.empty-state p{opacity:.5;font-size:14px}
+
+/* INITIAL STATE */
+.initial-state{
+  text-align:center;padding:50px 20px;
+  background:rgba(255,255,255,0.05);border-radius:16px;
+  border:1px solid rgba(255,255,255,0.1);margin-top:8px;
+}
+.initial-icon{font-size:48px;margin-bottom:16px;opacity:.3}
+.initial-state h3{font-size:16px;font-weight:500;opacity:.6;margin-bottom:6px}
+.initial-state p{font-size:13px;opacity:.4}
+.commission-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px}
+.commission-pill{
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+  border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500;
+  cursor:pointer;transition:all .15s;
+}
+.commission-pill:hover{background:rgba(125,211,252,0.15);border-color:rgba(125,211,252,0.4)}
+
+/* FOOTER */
+footer{
+  text-align:center;padding:30px 16px 0;
+  font-size:12px;opacity:.4;font-weight:500;letter-spacing:.5px;
+}
+
+@media(max-width:520px){
+  .search-row{flex-direction:column}
+  .btn-search,.btn-clear{width:100%}
+  .info-grid{grid-template-columns:1fr 1fr}
+  .card-header{flex-wrap:wrap}
+  .stats-bar{gap:8px}
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <header>
+    <div class="header-badge"><span></span>Regional 10 de Educacion<span></span></div>
+    <h1>CELIDER <em>10</em></h1>
+    <p class="subtitle">Plataforma de Designaciones — Modelo de Naciones Unidas</p>
+    <div class="divider"></div>
+  </header>
+
+  <div class="search-section">
+    <div class="search-wrap">
+      <label class="search-label" for="searchInput">Buscar Delegado por Nombre</label>
+      <div class="search-row">
+        <input type="text" id="searchInput" placeholder="Escribe tu nombre completo o parcial..." autocomplete="off" autocorrect="off">
+        <button class="btn-search" onclick="doSearch()">Buscar</button>
+        <button class="btn-clear" onclick="clearSearch()">Limpiar</button>
+      </div>
+      <div id="suggestions"></div>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-chip"><strong id="statTotal">0</strong> delegados</div>
+    <div class="stat-chip"><strong id="statComisiones">0</strong> comisiones</div>
+    <div class="stat-chip"><strong id="statCodelegados">0</strong> con codelegado</div>
+  </div>
+
+  <div id="results">
+    <div class="initial-state">
+      <div class="initial-icon">&#9741;</div>
+      <h3>Ingresa tu nombre para consultar tu designacion</h3>
+      <p>Podras ver tu comision, pais asignado, link del grupo y datos de tu codelegado</p>
+      <div class="commission-pills" id="commissionPills"></div>
+    </div>
+  </div>
+
+  <footer>CELIDER 10 &nbsp;|&nbsp; Regional 10 de Educacion, Santo Domingo 2 &nbsp;|&nbsp; Modelo de Naciones Unidas</footer>
+</div>
+
+<script>
+const PHONES = {
+  "laura loreily giron perdomo":"829-572-4139","gabriela fana":"829-906-2201","javier rosso":"849-383-5228","camila yeralis sabaris tineo":"829-261-1964","cristian jose encarnacion":"829-529-8167","yanneudy magallanez":"809-635-1181","keyther miguel delos santos valdez":"829-552-0351","emmy kamila concepcion fernandez":"829-830-0066","monika dimitrov":"849-395-4582","damaryt sofia echavarria sarante":"849-479-0916","moises mordan lora":"829-359-0967","ismael pena":"809-321-6799","hillary melissa vasquez de los santos":"809-441-1628","liana fernanda lara castillo":"849-255-1524","leisy america pena":"849-523-0571","kiara nayelhi rodriguez valoy":"829-573-3855","mariel paez":"829-669-1646","mia chantal alix cepeda":"849-382-5043","leah marie tejada tul":"829-639-8652","mia frannielly lora disla":"849-624-0381","luz cristhal tavarez":"829-425-6804","jose angel cabrera cuevas":"829-873-7529","damaris celina greer santana":"829-989-8081","avril binet vasquez":"849-249-0704","neyfer david capellan sanchez":"829-886-6146","yasmine alejandro baez":"829-726-0933","genesis y garcia":"849-399-9156","manuel emilio orozco mendez":"829-664-1061","alice nahomy cruz montero":"849-403-6325","lizmarie garcia cueto":"809-782-8524","ruth mery vicente encarnacion":"829-783-6268","laura sepulveda":"809-840-0860","samuel cid de cena":"829-753-9064","darlin bantroy leyba mejia":"809-716-0506","yilianny marie del orbe gonzalez":"829-201-3633","joyce nicole cuevas montero":"829-574-8283","mya de jesus":"809-292-7564","lorena morel":"829-936-4821","fransisco cesar ogando":"809-802-5502","linet medina":"809-618-8591","luis angel martinez":"809-834-5451","mia ramos benin":"849-503-4432","lissanet marte":"809-773-7458","yogeimy suarez":"829-442-8845","maria victoria castillo":"849-440-6750","maytte king feliz":"849-210-8618","albert yadiel king tavarez":"849-424-4964","yamelic ramos valdez":"809-854-9017","ameli familia":"829-865-7153","charlenis sanchez":"829-214-8287","yojansel perez":"829-414-7623","daisha masiel leyba mejia":"829-409-0605","ashanti gaz zayet adon":"829-350-3365","lia camila disla santana":"809-317-5151","elainy mercedez":"809-945-4334","carlos d leon":"829-542-4171","risheilys esther garcia feliz":"809-216-5745","helen marie marrero santos":"809-448-0406","felix g florentino":"829-206-0701","yarlenys de paula":"829-868-0196","clarisse candelaria carbonell":"829-771-1331","virmary mosquea":"809-327-5993","nathaly mieses":"809-474-0354","alan alberto troncoso":"809-654-3609","abiel bernar liriano jaquez":"929-673-4110","abrahinnys michelle mariano capellan":"829-665-1188","alkeliz henriquez ramirez":"849-499-3708","laura mariel castillo cruz":"829-755-1079","laurie massiel bonilla vargas":"829-853-4719","angelo jesus paulino reynoso":"849-542-2447","santiago montero montero":"829-645-9542","naomy crystal anrango velasquez":"809-543-7807","emet erickney heredia sanchez":"849-591-2686","lorianna jonaliz de oleo marrera":"809-788-0514","ashley feliz valdez":"809-280-5491","brianna carmenate suarez":"829-549-8352","aisha rojas fermin":"809-873-8794","edwin avil garcia munoz":"809-594-4887","osiris aneuris pena asencio":"809-322-0863","ruth alejandra montilla castro":"829-757-9541","maria esther roso gomez":"809-464-7900","ambar camila guillermo santana":"849-636-3546","axel dariel tiburcio german":"829-631-6049","bayron acosta cordero":"829-610-0076","alanna shenier bonifacio paniagua":"829-808-3074","albert alberto arias garcia":"829-866-5061","wilton rafael paulino florian":"809-335-4085","isatys charlin degand martinez":"849-886-3685","mary esther villar marte":"849-596-0401","shamir andres castillo ramirez":"809-964-9492","kamila polanco reyes":"809-773-4465","laia mercedes manon ruiz":"809-606-8089","natasha carolina fernandez soto":"849-828-0423","keren de jehova delgado estevez":"829-340-1100","bayron garcia marte":"829-542-1895","gadiel eduardo de los santos volquez":"829-469-1973","anna patricia louissaint augustin":"849-867-3601","andrea sophia melo melo":"809-387-0417","hendry diaz brito":"829-449-0284","laisha carolina baez suarez":"809-928-9566","ana selene polanco cesar":"849-710-1843","tito morales leyva":"829-362-3954","elivel rosmery hernandez canales":"849-501-1209","yamila rodriguez":"809-787-6179","ashanti ameli dietsch constanza":"809-404-1003","jade esmeralda rosario":"809-928-0641","aisha gabriela figuereo sanchez":"829-340-8579","andreily sarai duran rosario":"849-580-8130","bryan steven vargas":"849-636-3173","grey maria mejia flores":"849-476-1609","heidy jazmin mateo dominguez":"809-446-5486","luissanni martinez bueno":"849-585-4535","roberto misael rosario tejeda":"849-502-5080","roller eloi reyes paula":"809-729-3019","silvia arianna tavarez tejada":"829-550-1239","ashley paoly ramirez zapata":"809-404-2325","deshny stracy cyril":"809-816-3341","elias jimenez santana":"829-316-9776","harolyn danielys castro medina":"849-358-3438","juaneyris brito guzman":"809-498-1420","luz mailorens rodriguez javier":"809-768-2899","saul martinez mibel":"809-877-3854","yaniel rafael contreras ramirez":"829-381-7516","alberto esteban rodriguez vizcaino":"809-816-0842","belkis yamileth disla brito":"849-607-4595","jemelis cristal caceres de la cruz":"809-439-9370","jirehly regalado quirengue":"829-821-7228","karla marie feliz gomez":"809-504-8463","melany lisbeth taveras encarnacion":"809-640-6193","yeraisy michelle abreu pujols":"829-271-6980","cristy michelle ortiz ubri":"849-473-8722","darlenis elaine fantacia mendoza":"809-344-9939","emanuel de jesus martinez virgil":"849-501-7563","keren edwilin padua belen":"809-940-4839","apolonia abigail tejada villilo":"829-863-7430","efrain alcantara de la rosa":"849-257-1452","jeremy robert rojas vargas":"829-368-9630","danny emmanuel hernandez mejia":"829-520-4596","elba celeste bonilla aquino":"809-708-9761","mikaury leanny vargas martinez":"849-785-6036","cristal alexandra corsino romero":"849-535-2409","oliver aronis ventura perez":"809-206-5577","samuel leomarlin payano mendoza":"809-423-7109","albethy marie castillo brito":"809-860-2393","weslyna antonia fortuna":"809-507-1612","josue lensky destine":"829-450-6875","slomith sanchez fernandez":"849-380-5803","celinet brito castillo":"809-941-0766","johander miguel liriano pena":"809-319-2121","austin junior campusano":"809-301-4458","vianna yurielis castillo guadalupe":"849-353-0224","alejandra esther familia duval":"829-939-5649","matthew miguel montero abreu":"809-878-4312","ezequiel antonio de la paz rojas":"829-335-7128","daifel miguel medina de los santos":"829-779-0502","arismel hernandez":"809-601-1692","emil rafael alcala montilla":"829-457-7533","jenibel jonailis martinez ramirez":"829-716-5425","renata sayieh marinez ferreras":"849-284-8504","byron estevens ortiz abreu":"829-916-1791","rashell estevez cipion":"849-287-9430","fairy vasquez javier":"809-812-3531","nashiely victoria pena gomez":"829-784-6793","benjamin nael fabian familia":"829-978-5832","lia loret robles de los santos":"829-964-5236","genesis aideliz caminero manzanillo":"849-255-2528","wilmelissa medina feliz":"809-979-1854","rafael alexander alcantara valdez":"849-424-2354","ian yair tejeda alfonso":"849-815-1815","jose ramon rincon":"809-361-4655","anny pamela baez familia":"849-409-9716","catalina rodriguez santana":"809-486-3644","ashley crisleidy castillo concepcion":"809-864-8371","brinny jossyrha balbuena javier":"829-983-5150","gregory andres troncoso bido":"809-307-6019","einy maite castillo montero":"849-480-0301","rocio alexandra martinez":"829-477-5650","anthony misael martinez alfonseca":"849-356-1212","dariel ciprian":"809-393-3393","sara larimar concepcion rincon":"809-628-5273","mariela rosario":"849-527-0758","euris jesus amador":"829-262-6064","miguel angel rodriguez montero":"809-484-0130","glendi michelle rincon garcia":"809-359-0200","yuleisi andrea cena marte":"829-314-3772","nigel antonio cena":"809-630-3398","anyelina alejandra santana baez":"809-201-9663","ronald jenky pacheco morel":"829-525-5553","sam liang wu correa":"849-930-6154","mayelin yomairy santana castillo":"809-804-3131","ashley maria mercedes":"829-281-6648","jael samil rivas hernandez":"849-226-1219","jassiel nunez alcantara":"809-304-7655","rosa virginia lantigua":"849-440-2111","ambar olivero de los santos":"829-490-8098","alejandra nunez":"809-877-3790","franklin ferreras":"849-863-4068","pablo misael alcantara peralta":"809-234-3547","jesus israel ogando nina":"809-713-4378","giselle marie castillo mendez":"849-802-4437","wilnaika monbelais registre":"829-265-2258","gleidys francina lopez rosario":"809-442-5226","jeriel linares munoz":"829-838-1669","elianna vanessa dominguez velasquez":"809-414-5380","cesar alexander baez diaz":"849-568-2085","luz mabella feliz de leon":"809-952-0218","tiffany tiburcio":"809-281-2040","clara patricia garcia lizardo":"849-206-7713","paul uvinas":"829-826-8793","ilianny diaz":"849-373-7993","carlos esmil rosario":"829-751-4940","cristoferph hernandez sanchez":"809-609-6365","mia chanelle eusebio labidou":"829-920-2008","mia karla carrasco mesa":"809-861-8345","mayer hernandez":"849-862-7584","cristi maria batista mendez":"829-512-2508","samuel david perez perez":"829-641-4149","luz robercy carrasco beriguete":"829-827-2928","karen cros":"829-464-6977","daryel almanzar":"849-797-4502","cesar beltre":"829-705-3413","cielo nicole penson paredes":"849-324-3849","geraldo mendez valerio":"809-702-5550","cristal marit batista mendez":"849-431-0825","reisher ramirez":"849-846-4222","rocio milagros perez gustavo":"829-459-5519","darwin jose rivera caceres":"809-993-1067","keily german":"849-405-1601","emmanuel alcantara pena":"809-924-4880","keniel jose lopez aybar":"809-749-4259","yodiel rafael quero valera":"809-269-4325","jeanny marie reyes peguero":"829-499-6586"
+};
+
+const RAW = [
+  ["Luz Robercy Carrasco Beriguete","UN-Habitat","Dominican Republic","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Apolonia Abigail Tejada Villilo","UN-Habitat","Haiti","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Yasmine Alejandro Baez","UN-Habitat","Jamaica","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Kamila Polanco Reyes","UN-Habitat","Barbados","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Aisha Gabriela Figuereo Sanchez","UN-Habitat","Trinidad and Tobago","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Genesis Aideliz Caminero Manzanillo","UN-Habitat","Bahamas","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Nashiely Victoria Pena Gomez","UN-Habitat","Cuba","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Ashley Crisleidy Castillo Concepcion","UN-Habitat","Puerto Rico","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Helen Marie Marrero Santos","UN-Habitat","Antigua and Barbuda","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Cristy Michelle Ortiz Ubri","UN-Habitat","Saint Lucia","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Luis Angel Martinez","UN-Habitat","Mexico","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Ilianny Diaz","UN-Habitat","Colombia","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Nigel Antonio Cena","UN-Habitat","Brazil","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Ashanti Gaz Zayet Adon","UN-Habitat","Costa Rica","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Ana Selene Polanco Cesar","UN-Habitat","Panama","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Euris Jesus Amador","UN-Habitat","Netherlands","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Hillary Melissa Vasquez De los Santos","UN-Habitat","Singapore","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Deshny Stracy Cyril","UN-Habitat","Canada","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Giselle Marie Castillo Mendez","UN-Habitat","Germany","https://chat.whatsapp.com/CDT8eNBoy9D7ehzWEF2OPD?mode=gi_t",""],
+  ["Alkeliz Henriquez Ramirez","1815 Congreso de Viena","Austria","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Fairy Vasquez Javier","1815 Congreso de Viena","Rusia","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Aisha Rojas Fermin","1815 Congreso de Viena","Prusia","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Keyther Miguel Delos Santos Valdez","1815 Congreso de Viena","Francia","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Maytte King Feliz","1815 Congreso de Viena","Espana","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Jeriel Linares Munoz","1815 Congreso de Viena","Portugal","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Juaneyris Brito Guzman","1815 Congreso de Viena","Suecia","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Alanna Shenier Bonifacio Paniagua","1815 Congreso de Viena","Dinamarca","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Mya De Jesus","1815 Congreso de Viena","Paises Bajos","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Angelo Jesus Paulino Reynoso","1815 Congreso de Viena","Suiza","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Anthony Misael Martinez Alfonseca","1815 Congreso de Viena","Imperio Otomano","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Jirehly Regalado Quirengue","1815 Congreso de Viena","Reino de Piamonte-Cerdena","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Keily German","1815 Congreso de Viena","Reino de Napoles","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Clara Patricia Garcia Lizardo","1815 Congreso de Viena","Estados Pontificios","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Mikaury Leanny Vargas Martinez","1815 Congreso de Viena","Baviera","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Gabriela Fana","1815 Congreso de Viena","Sajonia","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Efrain Alcantara de la Rosa","1815 Congreso de Viena","Polonia","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Daifel Miguel Medina de los Santos","1815 Congreso de Viena","Noruega","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Mayer Hernandez","1815 Congreso de Viena","Confederacion Germanica","https://chat.whatsapp.com/C8iJ4O0YRSzD6FFCYubJQP?mode=gi_t",""],
+  ["Luissanni Martinez Bueno","CSNU","Bahren","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Laura Sepulveda"],
+  ["Laura Sepulveda","CSNU","Bahren","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Luissanni Martinez Bueno"],
+  ["Grey Maria Mejia Flores","CSNU","Colombia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Jassiel Nunez Alcantara"],
+  ["Jassiel Nunez Alcantara","CSNU","Colombia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Grey Maria Mejia Flores"],
+  ["Saul Martinez Mibel","CSNU","Dinamarca","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Jelitza Sanchez"],
+  ["Jelitza Sanchez","CSNU","Dinamarca","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Saul Martinez Mibel"],
+  ["Byron Estevens Ortiz Abreu","CSNU","Grecia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Celinet Brito Castillo"],
+  ["Celinet Brito Castillo","CSNU","Grecia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Byron Estevens Ortiz Abreu"],
+  ["Renata Sayieh Marinez Ferreras","CSNU","Letonia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Kiara Nayelhi Rodriguez Valoy"],
+  ["Kiara Nayelhi Rodriguez Valoy","CSNU","Letonia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Renata Sayieh Marinez Ferreras"],
+  ["Santiago Montero Montero","CSNU","Liberia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Alejandra Nunez"],
+  ["Alejandra Nunez","CSNU","Liberia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Santiago Montero Montero"],
+  ["Jade Esmeralda Rosario","CSNU","Pakistan","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Lizmarie Garcia Cueto"],
+  ["Lizmarie Garcia Cueto","CSNU","Pakistan","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Jade Esmeralda Rosario"],
+  ["Liana Fernanda Lara Castillo","CSNU","Panama","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Ruth Mery Vicente Encarnacion"],
+  ["Ruth Mery Vicente Encarnacion","CSNU","Panama","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Liana Fernanda Lara Castillo"],
+  ["Leisy America Pena","CSNU","Republica Democratica del Congo","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Shamir Andres Castillo Ramirez"],
+  ["Shamir Andres Castillo Ramirez","CSNU","Republica Democratica del Congo","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Leisy America Pena"],
+  ["Gleidys Francina Lopez Rosario","CSNU","Somalia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Andrea Sophia Melo Melo"],
+  ["Andrea Sophia Melo Melo","CSNU","Somalia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Gleidys Francina Lopez Rosario"],
+  ["Dariel Ciprian","CSNU","China","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Brinny Jossyrha Balbuena Javier"],
+  ["Brinny Jossyrha Balbuena Javier","CSNU","China","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Dariel Ciprian"],
+  ["Geraldo Mendez Valerio","CSNU","Rusia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Rosa Virginia Lantigua"],
+  ["Rosa Virginia Lantigua","CSNU","Rusia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Geraldo Mendez Valerio"],
+  ["Cristoferph Hernandez Sanchez","CSNU","Francia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Yarlenys De Paula"],
+  ["Yarlenys De Paula","CSNU","Francia","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Cristoferph Hernandez Sanchez"],
+  ["Benjamin Nael Fabian Familia","CSNU","Reino Unido","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Ambar Olivero de los Santos"],
+  ["Ambar Olivero de los Santos","CSNU","Reino Unido","https://chat.whatsapp.com/Cnlbh9sfGfAH9Bl9NowT9Y?mode=gi_t","Benjamin Nael Fabian Familia"],
+  ["Cesar Alexander Baez Diaz","G20","Alemania","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Darlenis Elaine Fantacia Mendoza","G20","Arabia Saudita","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Gadiel Eduardo De Los Santos Volquez","G20","Argentina","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Samuel Cid De Cena","G20","Australia","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Nathaly Mieses","G20","Brasil","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Elivel Rosmery Hernandez Canales","G20","Canada","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Laura Loreily Giron Perdomo","G20","China","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Austin Junior Campusano","G20","Corea del Sur","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Andreily Sarai Duran Rosario","G20","Estados Unidos","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Mariela Rosario","G20","India","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Ian Yair Tejeda Alfonso","G20","Indonesia","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Cesar Beltre","G20","Italia","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Cristal Marit Batista Mendez","G20","Japon","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Monika Dimitrov","G20","Mexico","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Hamlet Ismael Tejada Abreu","G20","Reino Unido","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Clarisse Candelaria Carbonell","G20","Rusia","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Natasha Carolina Fernandez Soto","G20","Sudafrica","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Ashanti Ameli Dietsch Constanza","G20","Turquia","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Cristian Jose Encarnacion","G20","Union Europea","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Mayelin Yomairy Santana Castillo","G20","Francia","https://chat.whatsapp.com/EQZPZ2XkSftBw2Qa2a2ZKW?mode=gi_t",""],
+  ["Megan Marie Varela Moreno","OMC","Estados Unidos","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Mia Ramos Benin"],
+  ["Mia Ramos Benin","OMC","Estados Unidos","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Megan Marie Varela Moreno"],
+  ["Melany Lisbeth Taveras Encarnacion","OMC","Francia","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Yilianny Marie Del Orbe Gonzalez"],
+  ["Yilianny Marie Del Orbe Gonzalez","OMC","Francia","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Melany Lisbeth Taveras Encarnacion"],
+  ["Ashley Feliz Valdez","OMC","Alemania","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Axel Dariel Tiburcio German"],
+  ["Axel Dariel Tiburcio German","OMC","Alemania","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Ashley Feliz Valdez"],
+  ["Albethy Marie Castillo Brito","OMC","Canada","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Oliver Aronis Ventura Perez"],
+  ["Oliver Aronis Ventura Perez","OMC","Canada","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Albethy Marie Castillo Brito"],
+  ["Fransisco Cesar Ogando","OMC","Japon","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Yamelic Ramos Valdez"],
+  ["Yamelic Ramos Valdez","OMC","Japon","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Fransisco Cesar Ogando"],
+  ["Naomy Crystal Anrango Velasquez","OMC","Paises Bajos","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Juliana Isamar Roman Familia"],
+  ["Juliana Isamar Roman Familia","OMC","Paises Bajos","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Naomy Crystal Anrango Velasquez"],
+  ["Sam Liang Wu Correa","OMC","Brasil","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Paul Uvinas"],
+  ["Paul Uvinas","OMC","Brasil","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Sam Liang Wu Correa"],
+  ["Josue Lensky Destine","OMC","Argentina","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Alberto Esteban Rodriguez Vizcaino"],
+  ["Alberto Esteban Rodriguez Vizcaino","OMC","Argentina","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Josue Lensky Destine"],
+  ["Mariel Paez","OMC","India","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Yeraisy Michelle Abreu Pujols"],
+  ["Yeraisy Michelle Abreu Pujols","OMC","India","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Mariel Paez"],
+  ["Yogeimy Suarez","OMC","Mexico","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Lia Loret Robles de los Santos"],
+  ["Lia Loret Robles de los Santos","OMC","Mexico","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Yogeimy Suarez"],
+  ["Einy Maite Castillo Montero","OMC","Nigeria","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Jose Ramon Rincon"],
+  ["Jose Ramon Rincon","OMC","Nigeria","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Einy Maite Castillo Montero"],
+  ["Jemelis Cristal Caceres De La Cruz","OMC","Kenia","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Glendi Michelle Rincon Garcia"],
+  ["Glendi Michelle Rincon Garcia","OMC","Kenia","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Jemelis Cristal Caceres De La Cruz"],
+  ["Abiel Bernar Liriano Jaquez","OMC","Vietnam","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Ruth Alejandra Montilla Castro"],
+  ["Ruth Alejandra Montilla Castro","OMC","Vietnam","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Abiel Bernar Liriano Jaquez"],
+  ["Catalina Rodriguez Santana","OMC","Indonesia","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Brianna Carmenate Suarez"],
+  ["Brianna Carmenate Suarez","OMC","Indonesia","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Catalina Rodriguez Santana"],
+  ["Keren de Jehova Delgado Estevez","OMC","Union Africana","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Ismael Pena"],
+  ["Ismael Pena","OMC","Union Africana","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Keren de Jehova Delgado Estevez"],
+  ["Hendry Diaz Brito","OMC","Cargill","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Rashell Estevez Cipion"],
+  ["Rashell Estevez Cipion","OMC","Cargill","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Hendry Diaz Brito"],
+  ["Lia Camila Disla Santana","OMC","Bayer Crop Science","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Yojansel Perez"],
+  ["Yojansel Perez","OMC","Bayer Crop Science","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Lia Camila Disla Santana"],
+  ["Sara Larimar Concepcion Rincon","OMC","Nestle","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Daisha Masiel Leyba Mejia"],
+  ["Daisha Masiel Leyba Mejia","OMC","Nestle","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Sara Larimar Concepcion Rincon"],
+  ["Laisha Carolina Baez Suarez","OMC","FAO","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Cristal Alexandra Corsino Romero"],
+  ["Cristal Alexandra Corsino Romero","OMC","FAO","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Laisha Carolina Baez Suarez"],
+  ["Roller Eloi Reyes Paula","OMC","Via Campesina","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Abrahinnys Michelle Mariano Capellan"],
+  ["Abrahinnys Michelle Mariano Capellan","OMC","Via Campesina","https://chat.whatsapp.com/CffW2W9Bi565l9Au0g0Diy?mode=gi_t","Roller Eloi Reyes Paula"],
+  ["Alan Alberto Troncoso","ECOSOC","Estados Unidos","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Elainy Mercedez"],
+  ["Elainy Mercedez","ECOSOC","Estados Unidos","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Alan Alberto Troncoso"],
+  ["Genesis Y Garcia","ECOSOC","Algeria","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Carlos D Leon"],
+  ["Carlos D Leon","ECOSOC","Algeria","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Genesis Y Garcia"],
+  ["Manuel Emilio Orozco Mendez","ECOSOC","Armenia","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Risheilys Esther Garcia Feliz"],
+  ["Risheilys Esther Garcia Feliz","ECOSOC","Armenia","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Manuel Emilio Orozco Mendez"],
+  ["Alice Nahomy Cruz Montero","ECOSOC","Antigua y Barbuda","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Mia Karla Carrasco Mesa"],
+  ["Mia Karla Carrasco Mesa","ECOSOC","Antigua y Barbuda","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Alice Nahomy Cruz Montero"],
+  ["Albert Alberto Arias Garcia","ECOSOC","Australia","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Luz Cristhal Tavarez"],
+  ["Luz Cristhal Tavarez","ECOSOC","Australia","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Albert Alberto Arias Garcia"],
+  ["Wilton Rafael Paulino Florian","ECOSOC","Austria","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Jose Angel Cabrera Cuevas"],
+  ["Jose Angel Cabrera Cuevas","ECOSOC","Austria","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Wilton Rafael Paulino Florian"],
+  ["Isatys Charlin Degand Martinez","ECOSOC","Bangladesh","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Luz Mabella Feliz de Leon"],
+  ["Luz Mabella Feliz de Leon","ECOSOC","Bangladesh","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Isatys Charlin Degand Martinez"],
+  ["Silvia Arianna Tavarez Tejada","ECOSOC","Canada","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Tiffany Tiburcio"],
+  ["Tiffany Tiburcio","ECOSOC","Canada","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Silvia Arianna Tavarez Tejada"],
+  ["Ashley Paoly Ramirez Zapata","ECOSOC","China","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Luz Mailorens Rodriguez Javier"],
+  ["Luz Mailorens Rodriguez Javier","ECOSOC","China","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Ashley Paoly Ramirez Zapata"],
+  ["Rafael Alexander Alcantara Valdez","ECOSOC","Croacia","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Yaniel Rafael Contreras Ramirez"],
+  ["Yaniel Rafael Contreras Ramirez","ECOSOC","Croacia","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Rafael Alexander Alcantara Valdez"],
+  ["Wilmelissa Medina Feliz","ECOSOC","Francia","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Miguel Angel Rodriguez Montero"],
+  ["Miguel Angel Rodriguez Montero","ECOSOC","Francia","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Wilmelissa Medina Feliz"],
+  ["Jeanny Marie Reyes Peguero","ECOSOC","Ecuador","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Reisher Ramirez"],
+  ["Reisher Ramirez","ECOSOC","Ecuador","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Jeanny Marie Reyes Peguero"],
+  ["Keniel Jose Lopez Aybar","ECOSOC","Alemania","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Rocio Milagros Perez Gustavo"],
+  ["Rocio Milagros Perez Gustavo","ECOSOC","Alemania","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Keniel Jose Lopez Aybar"],
+  ["Yodiel Rafael Quero Valera","ECOSOC","Japon","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Darwin Jose Rivera Caceres"],
+  ["Darwin Jose Rivera Caceres","ECOSOC","Japon","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Yodiel Rafael Quero Valera"],
+  ["Elba Celeste Bonilla Aquino","ECOSOC","Fondo Monetario Internacional","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Edwin Avil Garcia Munoz"],
+  ["Edwin Avil Garcia Munoz","ECOSOC","Fondo Monetario Internacional","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Elba Celeste Bonilla Aquino"],
+  ["Danny Emmanuel Hernandez Mejia","ECOSOC","Banco Mundial","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Osiris Aneuris Pena Asencio"],
+  ["Osiris Aneuris Pena Asencio","ECOSOC","Banco Mundial","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Danny Emmanuel Hernandez Mejia"],
+  ["Elias Jimenez Santana","ECOSOC","Goldman Sachs","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Margaret Gabriela Liranzo Concepcion"],
+  ["Margaret Gabriela Liranzo Concepcion","ECOSOC","Goldman Sachs","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Elias Jimenez Santana"],
+  ["Harolyn Danielys Castro Medina","ECOSOC","Amazon","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Jeremy Robert Rojas Vargas"],
+  ["Jeremy Robert Rojas Vargas","ECOSOC","Amazon","https://chat.whatsapp.com/GBx7mokM1NiLl6Ai1u2mpL?mode=gi_t","Harolyn Danielys Castro Medina"],
+  ["Anny Pamela Baez Familia","CIJ","S.E Baez","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Anyelina Alejandra Santana Baez","CIJ","S.E Santana","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Johander Miguel Liriano Pena","CIJ","S.E Liriano","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Bryan Steven Vargas","CIJ","S.E Vargas","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Mia Chanelle Eusebio Labidou","CIJ","S.E Eusebio","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Mia Franiellly Lora Disla","CIJ","S.E Lora","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Albert Yadiel King Tavarez","CIJ","S.E King","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Cielo Nicole Penson Paredes","CIJ","S.E Penson","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Ameli Familia","CIJ","S.E Familia","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Javier Rosso","CIJ","S.E Rosso","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Camila Yeralis Sabaris Tineo","CIJ","S.E Sabaris","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Yuleisi Andrea Cena Marte","CIJ","S.E Cena","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Bayron Garcia Marte","CIJ","S.E Garcia","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Damaris Celina Greer Santana","CIJ","S.E Greer","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Laurie Massiel Bonilla Vargas","CIJ","S.E Bonilla","https://chat.whatsapp.com/ImB6Bgs2kB3LjTFeG9GH5Z?mode=gi_t",""],
+  ["Maria Victoria Castillo","OMPI","Estados Unidos","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Cristi Maria Batista Mendez"],
+  ["Cristi Maria Batista Mendez","OMPI","Estados Unidos","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Maria Victoria Castillo"],
+  ["Roberto Misael Rosario Tejeda","OMPI","China","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Samuel David Perez Perez"],
+  ["Samuel David Perez Perez","OMPI","China","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Roberto Misael Rosario Tejeda"],
+  ["Emet Erickney Heredia Sanchez","OMPI","Japon","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Weslyna Antonia Fortuna"],
+  ["Weslyna Antonia Fortuna","OMPI","Japon","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Emet Erickney Heredia Sanchez"],
+  ["Lorianna Jonaliz De oleo Marrera","OMPI","Corea del Sur","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Slomith Sanchez Fernandez"],
+  ["Slomith Sanchez Fernandez","OMPI","Corea del Sur","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Lorianna Jonaliz De oleo Marrera"],
+  ["Mia Chantal Alix Cepeda","OMPI","Alemania","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Mary Esther Villar Marte"],
+  ["Mary Esther Villar Marte","OMPI","Alemania","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Mia Chantal Alix Cepeda"],
+  ["Leah Marie Tejada Tul","OMPI","Francia","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Joyce Nicole Cuevas Montero"],
+  ["Joyce Nicole Cuevas Montero","OMPI","Francia","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Leah Marie Tejada Tul"],
+  ["Virmary Mosquea","OMPI","Reino Unido","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Karen Cros"],
+  ["Karen Cros","OMPI","Reino Unido","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Virmary Mosquea"],
+  ["Felix G Florentino","OMPI","India","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Daryel Almanzar"],
+  ["Daryel Almanzar","OMPI","India","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Felix G Florentino"],
+  ["Charlenis Sanchez","OMPI","Mexico","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Emmanuel Alcantara Pena"],
+  ["Emmanuel Alcantara Pena","OMPI","Mexico","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Charlenis Sanchez"],
+  ["Bayron Acosta Cordero","OMPI","Brasil","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Jael Samil Rivas Hernandez"],
+  ["Jael Samil Rivas Hernandez","OMPI","Brasil","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Bayron Acosta Cordero"],
+  ["Darlin Bantroy Leyba Mejia","OMPI","Canada","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Samuel Leomarlin Payano Mendoza"],
+  ["Samuel Leomarlin Payano Mendoza","OMPI","Canada","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Darlin Bantroy Leyba Mejia"],
+  ["Franklin Ferreras","OMPI","Singapur","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Keren Edwilin Padua Belen"],
+  ["Keren Edwilin Padua Belen","OMPI","Singapur","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Franklin Ferreras"],
+  ["Gregory Andres Troncoso Bido","OMPI","Suecia","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Emanuel de Jesus Martinez Virgil"],
+  ["Emanuel de Jesus Martinez Virgil","OMPI","Suecia","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Gregory Andres Troncoso Bido"],
+  ["Ezequiel Antonio De La Paz Rojas","OMPI","OpenAI","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Anna Patricia Louissaint Augustin"],
+  ["Anna Patricia Louissaint Augustin","OMPI","OpenAI","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Ezequiel Antonio De La Paz Rojas"],
+  ["Jenibel Jonailis Martinez Ramirez","OMPI","Google DeepMind","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Tito Morales Leyva"],
+  ["Tito Morales Leyva","OMPI","Google DeepMind","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Jenibel Jonailis Martinez Ramirez"],
+  ["Emil Rafael Alcala Montilla","OMPI","Adobe","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Yamila Rodriguez"],
+  ["Yamila Rodriguez","OMPI","Adobe","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Emil Rafael Alcala Montilla"],
+  ["Arismel Hernandez","OMPI","Sony Music Entertainment","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Lorena Morel"],
+  ["Lorena Morel","OMPI","Sony Music Entertainment","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Arismel Hernandez"],
+  ["Maria Esther Roso Gomez","OMPI","Universal Music Group","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Linet Medina"],
+  ["Linet Medina","OMPI","Universal Music Group","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Maria Esther Roso Gomez"],
+  ["Ambar Camila Guillermo Santana","OMPI","Netflix","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Carlos Esmil Rosario"],
+  ["Carlos Esmil Rosario","OMPI","Netflix","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Ambar Camila Guillermo Santana"],
+  ["Yanneudy Magallanez","OMPI","Spotify","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Lia Michelle Lorenzo Acosta"],
+  ["Lia Michelle Lorenzo Acosta","OMPI","Spotify","https://chat.whatsapp.com/K0RUdbgXlmU3HWkbBvAaMm?mode=gi_t","Yanneudy Magallanez"],
+  ["Emmy Kamila Concepcion Fernandez","UNDRR","Republica Dominicana","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Damaryt Sofia Echavarria Sarante","UNDRR","Haiti","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Laia Mercedes Manon Ruiz","UNDRR","Cuba","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Pablo Misael Alcantara Peralta","UNDRR","Jamaica","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Jesus Israel Ogando Nina","UNDRR","Bahamas","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Heidy Jazmin Mateo Dominguez","UNDRR","Barbados","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Belkis Yamileth Disla Brito","UNDRR","Trinidad y Tobago","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Matthew Miguel Montero Abreu","UNDRR","Antigua y Barbuda","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Alejandra Esther Familia Duval","UNDRR","Dominica","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Vianna Yurielis Castillo Guadalupe","UNDRR","Santa Lucia","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Ashley Maria Mercedes","UNDRR","Estados Unidos","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Ronald Jenky Pacheco Morel","UNDRR","China","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Rocio Alexandra Martinez","UNDRR","Canada","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Laura Mariel Castillo Cruz","UNDRR","Francia","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Karla Marie Feliz Gomez","UNDRR","Reino Unido","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Elianna Vanessa Dominguez Velasquez","UNDRR","Paises Bajos","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Wilnaika Monbelais Registre","UNDRR","CARICOM","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Lissanet Marte","UNDRR","Banco Mundial","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Avril Binet Vasquez","UNDRR","Banco Interamericano de Desarrollo","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Neyfer David Capellan Sanchez","UNDRR","PNUD","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""],
+  ["Moises Mordan Lora","UNDRR","Tesla Energy","https://chat.whatsapp.com/HCgpfpKHeeTF95Yk772IhH?mode=gi_t",""]
+];
+
+function norm(s){
+  return s.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9 ]/g,'').trim();
+}
+
+function getPhone(name){
+  const n = norm(name);
+  if(PHONES[n]) return PHONES[n];
+  for(const k of Object.keys(PHONES)){
+    if(k.includes(n.split(' ')[0]) && n.split(' ').every(w=>k.includes(w.substring(0,4)))) return PHONES[k];
+  }
+  return null;
+}
+
+function initials(name){
+  const parts = name.split(' ').filter(p=>p.length>2);
+  if(parts.length>=2) return (parts[0][0]+parts[1][0]).toUpperCase();
+  return name.substring(0,2).toUpperCase();
+}
+
+const delegates = RAW.map(r=>({
+  name:r[0], commission:r[1], designation:r[2], link:r[3], coDelegate:r[4]
+}));
+
+const commissions = [...new Set(delegates.map(d=>d.commission))];
+document.getElementById('statTotal').textContent = delegates.length;
+document.getElementById('statComisiones').textContent = commissions.length;
+document.getElementById('statCodelegados').textContent = delegates.filter(d=>d.coDelegate).length;
+
+const pills = document.getElementById('commissionPills');
+commissions.forEach(c=>{
+  const p = document.createElement('div');
+  p.className='commission-pill';p.textContent=c;
+  p.onclick=()=>{document.getElementById('searchInput').value=c;doSearch();};
+  pills.appendChild(p);
+});
+
+const inp = document.getElementById('searchInput');
+inp.addEventListener('input',()=>{showSuggestions(inp.value)});
+inp.addEventListener('keydown',e=>{if(e.key==='Enter'){hideSuggestions();doSearch();}});
+
+function showSuggestions(q){
+  const sug = document.getElementById('suggestions');
+  if(!q||q.length<2){sug.style.display='none';return;}
+  const nq = norm(q);
+  const matches = delegates.filter(d=>norm(d.name).includes(nq)||norm(d.commission).includes(nq)||norm(d.designation).includes(nq)).slice(0,8);
+  if(!matches.length){sug.style.display='none';return;}
+  sug.innerHTML = matches.map(d=>`<div class="suggestion-item" onclick="selectSuggestion('${d.name.replace(/'/g,"\\'")}')"><mark>${d.name}</mark> <span style="color:rgba(255,255,255,0.45);font-size:12px">— ${d.commission}</span></div>`).join('');
+  sug.style.display='block';
+}
+
+function selectSuggestion(name){
+  document.getElementById('searchInput').value=name;
+  hideSuggestions();doSearch();
+}
+
+function hideSuggestions(){document.getElementById('suggestions').style.display='none';}
+
+document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap')) hideSuggestions();});
+
+function doSearch(){
+  const q = document.getElementById('searchInput').value.trim();
+  if(!q){showInitial();return;}
+  const nq = norm(q);
+  const found = delegates.filter(d=>
+    norm(d.name).includes(nq)||
+    norm(d.commission).includes(nq)||
+    norm(d.designation).includes(nq)
+  );
+  renderResults(found, q);
+}
+
+function clearSearch(){
+  document.getElementById('searchInput').value='';
+  hideSuggestions();showInitial();
+}
+
+function showInitial(){
+  document.getElementById('results').innerHTML=`<div class="initial-state"><div class="initial-icon">&#9741;</div><h3>Ingresa tu nombre para consultar tu designacion</h3><p>Podras ver tu comision, pais asignado, link del grupo y datos de tu codelegado</p><div class="commission-pills" id="commissionPills"></div></div>`;
+  const pills=document.getElementById('commissionPills');
+  commissions.forEach(c=>{const p=document.createElement('div');p.className='commission-pill';p.textContent=c;p.onclick=()=>{document.getElementById('searchInput').value=c;doSearch();};pills.appendChild(p);});
+}
+
+function hl(text, query){
+  if(!query) return text;
+  const nq = norm(query);
+  const parts = text.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'));
+  return parts.map(p=> norm(p)===nq ? `<mark style="background:#bae6fd;color:#042C53;border-radius:3px;padding:0 2px">${p}</mark>` : p).join('');
+}
+
+function renderResults(found, q){
+  const res = document.getElementById('results');
+  if(!found.length){
+    res.innerHTML=`<div class="empty-state"><h3>No se encontraron resultados</h3><p>Intenta con otro nombre o parte del nombre</p></div>`;
+    return;
+  }
+  let html = `<div class="result-count">${found.length} resultado${found.length!==1?'s':''} encontrado${found.length!==1?'s':''}</div>`;
+  found.forEach(d=>{
+    const hasCo = d.coDelegate && d.coDelegate.trim();
+    const phone = getPhone(d.name);
+    const coName = hasCo ? d.coDelegate : null;
+    const coPhone = coName ? getPhone(coName) : null;
+    html += `<div class="delegate-card">
+      <div class="card-header">
+        <div class="avatar">${initials(d.name)}</div>
+        <div class="card-name-block">
+          <div class="card-name">${hl(d.name,q)}</div>
+          ${phone?`<div class="card-district"><a href="tel:${phone}" class="phone-link" style="color:#7dd3fc">${phone}</a></div>`:'<div class="card-district" style="opacity:.5">Telefono no registrado</div>'}
+        </div>
+        <div class="card-type-badge">${hasCo?'Codelegado':'Delegado'}</div>
+      </div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="info-item"><div class="info-label">Comision</div><div class="info-value"><span class="commission">${d.commission}</span></div></div>
+          <div class="info-item"><div class="info-label">Designacion / Pais</div><div class="info-value"><span class="designation">${d.designation}</span></div></div>
+          <div class="info-item" style="grid-column:1/-1"><div class="info-label">Enlace del Grupo WhatsApp</div>
+            <a href="${d.link}" class="link-btn" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              Unirse al Grupo
+            </a>
+          </div>
+        </div>
+      </div>
+      ${hasCo?`<div class="codelegado-section">
+        <div class="codelegado-title">Informacion del Codelegado</div>
+        <div class="codelegado-grid">
+          <div class="codelegado-chip">
+            <div>
+              <div class="co-name">${coName}</div>
+              <div class="co-country" style="margin-top:2px">${d.designation}</div>
+            </div>
+            ${coPhone?`<div class="co-phone"><a href="tel:${coPhone}" class="phone-link">${coPhone}</a></div>`:''}
+          </div>
+        </div>
+      </div>`:''}
+    </div>`;
+  });
+  res.innerHTML=html;
+}
+</script>
+</body>
+</html>
